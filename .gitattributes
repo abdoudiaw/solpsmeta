@@ -1,0 +1,2 @@
+tools/nn/models/*.pt filter=lfs diff=lfs merge=lfs -text
+tools/nn/Figs/*.png filter=lfs diff=lfs merge=lfs -text
