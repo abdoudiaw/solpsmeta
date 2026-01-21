@@ -1,0 +1,546 @@
+*cf:    int                1    ns                              
+         20
+*cf:    char             120    label                           
+ b2mn     B2.5 bjb99/7 SOLPS-ITER  2026-01-19  18:58 cloud   template, 5.2 switches                                      
+*cf:    int                1    nfld                            
+         90
+*cf:    int                1    linlog                          
+          0
+*cf:    char              60    title                           
+ time step counter                                           
+*cf:    char              12    label                           
+ itim        
+*cf:    int                1    linlog                          
+          0
+*cf:    char              60    title                           
+ iteration counter                                           
+*cf:    char              12    label                           
+ itcnt       
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species   0        
+*cf:    char              12    label                           
+ aresco(  0) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species   1        
+*cf:    char              12    label                           
+ aresco(  1) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species   2        
+*cf:    char              12    label                           
+ aresco(  2) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species   3        
+*cf:    char              12    label                           
+ aresco(  3) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species   4        
+*cf:    char              12    label                           
+ aresco(  4) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species   5        
+*cf:    char              12    label                           
+ aresco(  5) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species   6        
+*cf:    char              12    label                           
+ aresco(  6) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species   7        
+*cf:    char              12    label                           
+ aresco(  7) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species   8        
+*cf:    char              12    label                           
+ aresco(  8) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species   9        
+*cf:    char              12    label                           
+ aresco(  9) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species  10        
+*cf:    char              12    label                           
+ aresco( 10) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species  11        
+*cf:    char              12    label                           
+ aresco( 11) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species  12        
+*cf:    char              12    label                           
+ aresco( 12) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species  13        
+*cf:    char              12    label                           
+ aresco( 13) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species  14        
+*cf:    char              12    label                           
+ aresco( 14) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species  15        
+*cf:    char              12    label                           
+ aresco( 15) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species  16        
+*cf:    char              12    label                           
+ aresco( 16) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species  17        
+*cf:    char              12    label                           
+ aresco( 17) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species  18        
+*cf:    char              12    label                           
+ aresco( 18) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of continuity equation, species  19        
+*cf:    char              12    label                           
+ aresco( 19) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species   0 
+*cf:    char              12    label                           
+ aresmo(  0) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species   1 
+*cf:    char              12    label                           
+ aresmo(  1) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species   2 
+*cf:    char              12    label                           
+ aresmo(  2) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species   3 
+*cf:    char              12    label                           
+ aresmo(  3) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species   4 
+*cf:    char              12    label                           
+ aresmo(  4) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species   5 
+*cf:    char              12    label                           
+ aresmo(  5) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species   6 
+*cf:    char              12    label                           
+ aresmo(  6) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species   7 
+*cf:    char              12    label                           
+ aresmo(  7) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species   8 
+*cf:    char              12    label                           
+ aresmo(  8) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species   9 
+*cf:    char              12    label                           
+ aresmo(  9) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species  10 
+*cf:    char              12    label                           
+ aresmo( 10) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species  11 
+*cf:    char              12    label                           
+ aresmo( 11) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species  12 
+*cf:    char              12    label                           
+ aresmo( 12) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species  13 
+*cf:    char              12    label                           
+ aresmo( 13) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species  14 
+*cf:    char              12    label                           
+ aresmo( 14) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species  15 
+*cf:    char              12    label                           
+ aresmo( 15) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species  16 
+*cf:    char              12    label                           
+ aresmo( 16) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species  17 
+*cf:    char              12    label                           
+ aresmo( 17) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species  18 
+*cf:    char              12    label                           
+ aresmo( 18) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of parallel momentum equation, species  19 
+*cf:    char              12    label                           
+ aresmo( 19) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of total parallel momentum equation        
+*cf:    char              12    label                           
+ aresmt      
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of electron heat equation                  
+*cf:    char              12    label                           
+ areshe      
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of all atom heat equation                  
+*cf:    char              12    label                           
+ areshi      
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of residual of electric potential equation             
+*cf:    char              12    label                           
+ arespo      
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species   0                 
+*cf:    char              12    label                           
+ acorpa(  0) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species   1                 
+*cf:    char              12    label                           
+ acorpa(  1) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species   2                 
+*cf:    char              12    label                           
+ acorpa(  2) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species   3                 
+*cf:    char              12    label                           
+ acorpa(  3) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species   4                 
+*cf:    char              12    label                           
+ acorpa(  4) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species   5                 
+*cf:    char              12    label                           
+ acorpa(  5) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species   6                 
+*cf:    char              12    label                           
+ acorpa(  6) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species   7                 
+*cf:    char              12    label                           
+ acorpa(  7) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species   8                 
+*cf:    char              12    label                           
+ acorpa(  8) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species   9                 
+*cf:    char              12    label                           
+ acorpa(  9) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species  10                 
+*cf:    char              12    label                           
+ acorpa( 10) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species  11                 
+*cf:    char              12    label                           
+ acorpa( 11) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species  12                 
+*cf:    char              12    label                           
+ acorpa( 12) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species  13                 
+*cf:    char              12    label                           
+ acorpa( 13) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species  14                 
+*cf:    char              12    label                           
+ acorpa( 14) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species  15                 
+*cf:    char              12    label                           
+ acorpa( 15) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species  16                 
+*cf:    char              12    label                           
+ acorpa( 16) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species  17                 
+*cf:    char              12    label                           
+ acorpa( 17) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species  18                 
+*cf:    char              12    label                           
+ acorpa( 18) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of pressure, species  19                 
+*cf:    char              12    label                           
+ acorpa( 19) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species   0                 
+*cf:    char              12    label                           
+ acorua(  0) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species   1                 
+*cf:    char              12    label                           
+ acorua(  1) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species   2                 
+*cf:    char              12    label                           
+ acorua(  2) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species   3                 
+*cf:    char              12    label                           
+ acorua(  3) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species   4                 
+*cf:    char              12    label                           
+ acorua(  4) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species   5                 
+*cf:    char              12    label                           
+ acorua(  5) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species   6                 
+*cf:    char              12    label                           
+ acorua(  6) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species   7                 
+*cf:    char              12    label                           
+ acorua(  7) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species   8                 
+*cf:    char              12    label                           
+ acorua(  8) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species   9                 
+*cf:    char              12    label                           
+ acorua(  9) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species  10                 
+*cf:    char              12    label                           
+ acorua( 10) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species  11                 
+*cf:    char              12    label                           
+ acorua( 11) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species  12                 
+*cf:    char              12    label                           
+ acorua( 12) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species  13                 
+*cf:    char              12    label                           
+ acorua( 13) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species  14                 
+*cf:    char              12    label                           
+ acorua( 14) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species  15                 
+*cf:    char              12    label                           
+ acorua( 15) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species  16                 
+*cf:    char              12    label                           
+ acorua( 16) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species  17                 
+*cf:    char              12    label                           
+ acorua( 17) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species  18                 
+*cf:    char              12    label                           
+ acorua( 18) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of velocity, species  19                 
+*cf:    char              12    label                           
+ acorua( 19) 
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of combined velocity                     
+*cf:    char              12    label                           
+ acorut      
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of electron temperature                  
+*cf:    char              12    label                           
+ acorte      
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of all atom temperature                  
+*cf:    char              12    label                           
+ acorti      
+*cf:    int                1    linlog                          
+          1
+*cf:    char              60    title                           
+ norm of correction of electric potential                    
+*cf:    char              12    label                           
+ acorpo      

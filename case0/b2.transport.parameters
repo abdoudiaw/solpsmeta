@@ -1,0 +1,11 @@
+ &transport
+ write_nml_transp = .false.,
+ flag_dna=1, parm_dna=20*0.3,
+ flag_dpa=1, parm_dpa=20*0.0,
+ flag_vla=1, parm_vla=20*0.0,
+ flag_vsa=1, parm_vsa=20*0.2,
+ flag_hci=1, parm_hci=20*1.0,
+ flag_hce=1, parm_hce=1.0,
+ flag_sig=1, parm_sig=0.000001,
+ flag_alf=1, parm_alf=0.000001,
+ /
