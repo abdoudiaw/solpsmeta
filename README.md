@@ -1,4 +1,4 @@
-# solpsmeta — ORNL SOLPS-ITER metadata builder
+## solpsmeta — ORNL SOLPS-ITER metadata builder
 
 Utilities for building SOLPS-ITER case metadata (`params.json`) and running ensemble parameter scans using
 [libEnsemble](https://libensemble.readthedocs.io/en/main/index.html).
@@ -285,9 +285,9 @@ python3 examples/runners/run_libe_solps.py \
 You may set environment variables instead of passing arguments:
 
 ```bash
-export SOLPS_BASERUN_SRC=/PATH/TO/baserun
-export SOLPS_WARM_START_DIR=/PATH/TO/warm_start_case
-export SOLPS_EXE=b2mn_glibc
+export SOLPS_BASERUN_SRC=baserun
+export SOLPS_WARM_START_DIR=run_dir
+export SOLPS_EXE=b2mn
 export SOLPS_NP_RANKS=40
 
 export SOLPS_SIM_MAX=20
@@ -303,74 +303,20 @@ cd examples/runners
 python3 run_libe_solps.py
 ```
 
-Unset any variable:
-
-```bash
-unset SOLPS_EXE
-```
-
 ---
 
-## Running in background
-
-### Simple background run
+## Running
 
 ```bash
 python3 examples/runners/run_libe_solps.py \
   --baserun-src /PATH/TO/baserun \
   --warm-start-dir /PATH/TO/warm_start_case \
   --sim-max 20 --nworkers 4 --batch 4 \
-  > run.log 2>&1 &
-disown
+  > run.log 
 ```
-
-### Using nohup
-
-```bash
-nohup python3 examples/runners/run_libe_solps.py \
-  --baserun-src /PATH/TO/baserun \
-  --warm-start-dir /PATH/TO/warm_start_case \
-  --sim-max 20 --nworkers 4 --batch 4 \
-  > run.log 2>&1 < /dev/null &
-```
-
----
-
-## Notes (macOS tar)
-
-macOS default `tar` (BSD tar / bsdtar) does not support GNU tar option:
-
-```
-tar --sort=name
-```
-
-If compression is enabled and you see:
-
-```
-tar: Option --sort=name is not supported
-```
-
-Solutions:
-
-* run with `--no-compress` (recommended on macOS), OR
-* install GNU tar:
-
-```bash
-brew install gnu-tar
-```
-
-and configure compression to use `gtar`.
-
----
 
 ## Author / Maintainer
 
 Abdourahmane (Abdou) Diaw (ORNL)
 
-```
-
----
-
-If you want, I can also generate a *shorter* README version (1 page) and keep this one as `docs/README_full.md`.
-```
 
