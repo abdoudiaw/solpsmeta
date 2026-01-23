@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "solpsmeta"
+version = "0.1.0"
+description = "SOLPS metadata + case builder utilities"
+requires-python = ">=3.9"
+dependencies = [
+  "numpy",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["solpsmeta*"]
+
