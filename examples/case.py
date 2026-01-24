@@ -1,30 +1,9 @@
 #!/usr/bin/env python3
 import os, json, uuid, argparse
 from datetime import datetime
-from solpsmeta import SpeciesSpec, build_metadata_v2, _coerce_species, _species_label
+from solpsmeta import SpeciesSpec, meta_builder, _coerce_species, _species_label, _git_info
 
 import subprocess
-
-def _git_info(repo_dir):
-    repo_dir = os.path.abspath(repo_dir)
-
-    def run(cmd):
-        r = subprocess.run(cmd, cwd=repo_dir, capture_output=True, text=True)
-        if r.returncode != 0:
-            return ""
-        return r.stdout.strip()
-
-    commit = run(["git", "rev-parse", "HEAD"])
-    branch = run(["git", "rev-parse", "--abbrev-ref", "HEAD"])
-    remote = run(["git", "remote", "get-url", "origin"])
-    dirty  = (run(["git", "status", "--porcelain"]) != "")
-
-    return {
-        "repo": remote,
-        "commit": commit,
-        "branch": branch,
-        "dirty": dirty,
-    }
 
 
 def parse_args():
@@ -86,7 +65,7 @@ def main():
         "hce": {"type": "global", "value": args.hci},
     }
 
-    spec = build_metadata_v2(
+    spec = meta_builder(
         machine=args.machine,
         campaign=args.campaign,
         time_dependence={"mode": "steady_state"},
@@ -113,7 +92,7 @@ def main():
         spec["provenance"]["code"]["git"] = _git_info(args.solps_repo)
 
 
-    out_path = os.path.join(out_dir, "params.json")
+    out_path = os.path.join(out_dir, f"params_{case_id}.json")
     with open(out_path, "w") as f:
         json.dump(spec, f, indent=2)
 

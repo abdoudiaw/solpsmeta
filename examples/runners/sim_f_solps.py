@@ -3,10 +3,12 @@ import os, json, subprocess, uuid
 import numpy as np
 import uuid
 from datetime import datetime
-from solpsmeta import SpeciesSpec, build_metadata_v2, make_case_from_template, apply_edits, _coerce_species, _species_label
+from solpsmeta import SpeciesSpec, meta_builder, make_case_from_template, apply_edits, _coerce_species, _species_label
 import time
 import glob
 from utils import _append_status, _append_index, clean_run_dir
+from utils import upsert_case_to_sqlite
+
 
     
 def sim_f(H, persis_info, sim_specs, libE_info):
@@ -21,7 +23,7 @@ def sim_f(H, persis_info, sim_specs, libE_info):
     out_root = user["out_root"]
     solps_exe = user["solps_exe"]
     np_ranks = int(user.get("np_ranks", 1))
-
+    sqlite_path = user.get("sqlite_path", None)
     base_meta = user["base_meta"]
     species = user["species"]
 
@@ -73,8 +75,8 @@ def sim_f(H, persis_info, sim_specs, libE_info):
             "hce": {"type": "global", "value": x["hci"]},
         }
 
-        species = _coerce_species(species)
-        spec = build_metadata_v2(
+        species0 = _coerce_species(species)
+        spec = meta_builder(
             machine=base_meta["machine"],
             time_dependence={"mode": "steady_state"},
             case_id=case_id,
@@ -82,7 +84,7 @@ def sim_f(H, persis_info, sim_specs, libE_info):
             run_dir=run_dir,
             authors=base_meta["authors"],
             owner=base_meta["owner"],
-            species=species,
+            species=species0,
             puff_targets=puff_targets,
             Pe_W=x["Pe_W"],
             Pi_W=x["Pi_W"],
@@ -105,7 +107,7 @@ def sim_f(H, persis_info, sim_specs, libE_info):
             "label": label,
             "case_dir": run_dir,
             "machine": spec["machine"],
-            "created": spec["case"]["created"],
+            "created": spec["case"]["created_ts"],
             "authors": spec["case"]["authors"],
             "status": "created",
         })
@@ -136,6 +138,27 @@ def sim_f(H, persis_info, sim_specs, libE_info):
             f,
             )
 
+        # Update converged flag in params.json (truth lives in the run_dir)
+        spec["case"]["status"]["converged"] = (ret == 0)
+        with open(os.path.join(run_dir, "params.json"), "w") as f:
+            json.dump(spec, f, indent=2)
+
+        # Append to SQLite index (optional)
+        if sqlite_path:
+            try:
+                upsert_case_to_sqlite(sqlite_path, os.path.join(run_dir, "params.json"), returncode=ret)
+            except Exception as e:
+                # Don't fail the whole simulation because the index write had a hiccup
+                warn_msg = json.dumps({
+                    "ts": datetime.now().isoformat(timespec="seconds"),
+                    "event": "index_warn",
+                    "case_id": case_id,
+                    "run_dir": run_dir,
+                    "error": str(e),
+                })
+                _append_status(out_root, warn_msg)
+
+
         end_msg = json.dumps({
             "ts": datetime.now().isoformat(timespec="seconds"),
             "event": "end",
@@ -145,9 +168,10 @@ def sim_f(H, persis_info, sim_specs, libE_info):
         })
         _append_status(out_root, end_msg)
 
-        H_o["status"][i] = ret
-        H_o["case_id"][i] = case_id
-        H_o["run_dir"][i] = run_dir
+        H_o[i]["status"] = int(ret)
+        H_o[i]["case_id"] = case_id
+        H_o[i]["run_dir"] = run_dir
+
 
     return H_o, persis_info
 

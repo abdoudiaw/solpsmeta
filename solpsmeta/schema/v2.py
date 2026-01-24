@@ -24,7 +24,7 @@ def _species_label(species) -> str:
     species = _coerce_species(species)
     return "_".join(species.list)   # e.g., D_C_Ne
 
-def build_metadata_v2(
+def meta_builder(
     machine: str,
     campaign: str,
     case_id: str,
@@ -45,7 +45,7 @@ def build_metadata_v2(
     time_dependence: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     return {
-        "schema": "solps-run-metadata-v2",
+        "schema": "solpsmeta",
         "machine": machine,
         "campaign": campaign,
         "case": {
@@ -97,3 +97,25 @@ def _coerce_species(species):
         )
     raise TypeError(f"species must be SpeciesSpec or dict, got {type(species)}")
     
+
+
+def _git_info(repo_dir):
+    repo_dir = os.path.abspath(repo_dir)
+
+    def run(cmd):
+        r = subprocess.run(cmd, cwd=repo_dir, capture_output=True, text=True)
+        if r.returncode != 0:
+            return ""
+        return r.stdout.strip()
+
+    commit = run(["git", "rev-parse", "HEAD"])
+    branch = run(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+    remote = run(["git", "remote", "get-url", "origin"])
+    dirty  = (run(["git", "status", "--porcelain"]) != "")
+
+    return {
+        "repo": remote,
+        "commit": commit,
+        "branch": branch,
+        "dirty": dirty,
+    }

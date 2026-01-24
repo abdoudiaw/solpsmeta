@@ -40,13 +40,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(HERE, ".."))
 sys.path.insert(0, REPO_ROOT)
 
-from solpsmeta import SpeciesSpec, build_metadata_v2, make_case_from_template, apply_edits, species_label
+from solpsmeta import SpeciesSpec, meta_builder, make_case_from_template, apply_edits, species_label
 from sim_f_solps import sim_f
 import argparse
 
 from pathlib import Path
 from utils import looks_finished_by_runlog, done_run_dirs, clean_solps_run_dir, compress_and_remove_run_dir
 from utils import default_nworkers, watch_progress_by_donefiles, build_ensemble_dirname, ensure_baserun, clean_run_dir
+from utils import ensure_cases_sqlite
 
 
 def parse_args():
@@ -151,6 +152,10 @@ def main():
     os.makedirs(out_root, exist_ok=True)
     ensure_baserun(out_root, baserun_src, mode="symlink")
 
+    sqlite_path = os.path.join(out_root, "cases.sqlite")
+    ensure_cases_sqlite(sqlite_path)
+
+
     sim_specs = {
         "sim_f": sim_f,
         "inputs": ["x"],
@@ -160,10 +165,12 @@ def main():
             "out_root": out_root,
             "solps_exe": solps_exe,
             "np_ranks": np_ranks,
+            "sqlite_path": sqlite_path,   # <--- ADD
             "species": species,
             "base_meta": {**base_meta, "mode": mode, "method": method, "species_label": sp_lbl},
         },
     }
+
 
     # watcher thread (progress + cleanup only)
     stop = Event()

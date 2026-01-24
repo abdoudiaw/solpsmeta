@@ -2,7 +2,127 @@ import os, shutil, glob, time, subprocess, json
 from tqdm import tqdm
 from datetime import datetime
 from pathlib import Path
+import sqlite3
+import json
+import os
+import time
 
+def _extract_vector_from_params(meta: dict):
+    puff_targets = _safe_get(meta, "inputs.gas_puffing.targets", {}) or {}
+    puff_d2 = float(_safe_get(puff_targets, "D2.value", 0.0) or 0.0)
+    puff_ne = float(_safe_get(puff_targets, "Ne.value", 0.0) or 0.0)
+
+    pe = float(_safe_get(meta, "inputs.power.Pe_W", 0.0) or 0.0)
+    pi = float(_safe_get(meta, "inputs.power.Pi_W", 0.0) or 0.0)
+    ptot = pe + pi
+
+    core_flux = float(_safe_get(meta, "inputs.core.particle_flux_s-1", 0.0) or 0.0)
+    dna = float(_safe_get(meta, "inputs.transport.dna.value", 0.0) or 0.0)
+    hci = float(_safe_get(meta, "inputs.transport.hci.value", 0.0) or 0.0)
+    hce = float(_safe_get(meta, "inputs.transport.hce.value", 0.0) or 0.0)
+
+    return puff_d2, puff_ne, ptot, core_flux, dna, hci, hce
+    
+def ensure_cases_sqlite(sqlite_path: str) -> None:
+    """Create the cases table if it doesn't exist; add missing columns if it does."""
+    os.makedirs(os.path.dirname(os.path.abspath(sqlite_path)), exist_ok=True)
+    conn = sqlite3.connect(sqlite_path, timeout=30)
+    cur = conn.cursor()
+
+    # Create base table if missing (includes newest columns)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS cases (
+            case_id     TEXT PRIMARY KEY,
+            run_dir     TEXT,
+            params_path TEXT,
+            machine     TEXT,
+            campaign    TEXT,
+            label       TEXT,
+            created_ts  TEXT,
+            converged   INTEGER,
+            returncode  INTEGER,
+
+            puff_d2     REAL,
+            puff_ne     REAL,
+            ptot_w      REAL,
+            core_flux   REAL,
+            dna         REAL,
+            hci         REAL,
+            hce         REAL
+        );
+    """)
+
+    # --- migrate older DBs: add any missing columns ---
+    cur.execute("PRAGMA table_info(cases);")
+    existing = {row[1] for row in cur.fetchall()}  # row[1] = column name
+
+    # Add missing columns safely
+    if "hce" not in existing:
+        cur.execute("ALTER TABLE cases ADD COLUMN hce REAL;")
+
+    # (If you add more columns later, follow the same pattern here.)
+
+    cur.execute("CREATE INDEX IF NOT EXISTS idx_cases_machine_campaign ON cases(machine, campaign);")
+    cur.execute("CREATE INDEX IF NOT EXISTS idx_cases_label ON cases(label);")
+    cur.execute("CREATE INDEX IF NOT EXISTS idx_cases_converged ON cases(converged);")
+
+    conn.commit()
+    conn.close()
+
+
+def _safe_get(d, path, default=None):
+    cur = d
+    for key in path.split("."):
+        if not isinstance(cur, dict) or key not in cur:
+            return default
+        cur = cur[key]
+    return cur
+    
+def upsert_case_to_sqlite(sqlite_path: str, params_path: str, returncode: int,
+                          max_retries: int = 15, base_sleep_s: float = 0.05) -> None:
+    """
+    Upsert one row into SQLite for this case.
+    Retry loop makes it safe with multiple libE workers.
+    """
+    params_path = os.path.abspath(params_path)
+    with open(params_path, "r") as f:
+        meta = json.load(f)
+
+    case_id = _safe_get(meta, "case.case_id", "") or os.path.basename(os.path.dirname(params_path)).replace("run_", "")
+    run_dir = _safe_get(meta, "case.location.path", os.path.dirname(params_path)) or os.path.dirname(params_path)
+    machine = _safe_get(meta, "machine", "")
+    campaign = _safe_get(meta, "campaign", "")
+    label = _safe_get(meta, "case.label", "")
+    created_ts = _safe_get(meta, "case.created_ts", "") or _safe_get(meta, "case.created", "")
+    converged = 1 if bool(_safe_get(meta, "case.status.converged", False)) else 0
+
+    puff_d2, puff_ne, ptot_w, core_flux, dna, hci, hce  = _extract_vector_from_params(meta)
+
+    for k in range(max_retries):
+        try:
+            conn = sqlite3.connect(sqlite_path, timeout=30)
+            cur = conn.cursor()
+            cur.execute("""
+                INSERT OR REPLACE INTO cases
+                (case_id, run_dir, params_path, machine, campaign, label, created_ts, converged, returncode,
+                 puff_d2, puff_ne, ptot_w, core_flux, dna, hci, hce)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """, (
+                case_id, run_dir, params_path, machine, campaign, label, created_ts,
+                converged, int(returncode),
+                puff_d2, puff_ne, ptot_w, core_flux, dna, hci, hce
+            ))
+            conn.commit()
+            conn.close()
+            return
+        except sqlite3.OperationalError as e:
+            # database is locked => backoff & retry
+            msg = str(e).lower()
+            if "locked" in msg or "busy" in msg:
+                time.sleep(base_sleep_s * (2 ** min(k, 6)))
+                continue
+            raise
+            
 def looks_finished_by_runlog(run_dir: str) -> bool:
     logp = Path(run_dir) / "run.log"
     if not logp.exists():
