@@ -202,34 +202,108 @@ def _parse_float_list(block: str):
     vals = [v.strip() for v in raw.split(",") if v.strip()]
     return vals  # keep as strings initially
 
-def _format_userflux(prefix: str, vals: list) -> str:
-    # Keep it one line (simple) — you can wrap later if you want.
-    return prefix + ", ".join(vals) + "\n"
+_NUM = re.compile(r"""
+    (?P<num>
+        [-+]?(
+            (?:\d+\.\d*)|(?:\d*\.\d+)|(?:\d+)
+        )
+        (?:[Ee][-+]?\d+)?
+    )
+""", re.VERBOSE)
+
+def _infer_delim_between(block: str) -> str:
+    """
+    Return the exact text between numbers, excluding the numbers themselves.
+    For your files this should become something like: "    ,  "
+    """
+    ms = list(_NUM.finditer(block))
+    if len(ms) >= 2:
+        return block[ms[0].end("num"):ms[1].start("num")]
+    return "    ,  "
+
+def _ensure_trailing_comma(block: str) -> str:
+    # Keep trailing whitespace/newline
+    m = re.search(r"\s*\Z", block)
+    endws = m.group(0) if m else ""
+    core = block[:len(block) - len(endws)]
+    if not core.rstrip().endswith(","):
+        core = core.rstrip() + ","
+    return core + endws
+
+def _pad_userflux_block_to_nstrai(block: str, nstrai: int, pad_token: str = "0.00") -> str:
+    ms = list(_NUM.finditer(block))
+    if len(ms) >= nstrai:
+        return _ensure_trailing_comma(block)
+
+    delim = _infer_delim_between(block)
+
+    # strip end whitespace, strip ONE trailing comma if present (we'll add it back once)
+    m = re.search(r"\s*\Z", block)
+    endws = m.group(0) if m else ""
+    core = block[:len(block) - len(endws)].rstrip()
+
+    if core.endswith(","):
+        core = core[:-1].rstrip()
+
+    need = nstrai - len(ms)
+
+    # Append values using *exactly* the between-number delimiter (which already contains the comma)
+    for _ in range(need):
+        core += delim + pad_token
+
+    # Add exactly one trailing comma at end
+    core += ","
+    return core + endws
+
+def _pad_userflux_block_to_minlen(block: str, minlen: int, pad_token: str = "0.00") -> str:
+    """Pad only if needed to reach minlen numbers. Do NOT pad to nstrai."""
+    nums = list(_NUM.finditer(block))
+    if len(nums) >= minlen:
+        return _ensure_trailing_comma(block)
+
+    delim = _infer_delim_between(block)
+
+    m = re.search(r"\s*\Z", block)
+    endws = m.group(0) if m else ""
+    core = block[:len(block) - len(endws)].rstrip()
+
+    if core.endswith(","):
+        core = core[:-1].rstrip()
+
+    need = minlen - len(nums)
+    for _ in range(need):
+        core += delim + pad_token
+
+    core += ","
+    return core + endws
 
 def set_puff_by_gpfc(text: str, target_gpfc: list, value: float) -> str:
-    """
-    Find stream index i where gpfc(1,i) == target_gpfc (e.g. [2,0,0])
-    and set userfluxparm(1,1)[i] to value.
-    """
     nstrai = _read_nstrai(text)
     gpfc_map = _parse_gpfc_map(text)
 
     matches = [i for i, tri in gpfc_map.items() if tri == target_gpfc]
     if len(matches) != 1:
         raise ValueError(f"Expected 1 gpfc match for {target_gpfc}, found {matches}")
+    idx = matches[0]  # 1-based
 
-    idx = matches[0]  # 1-based stream index
+    # Optional sanity check (doesn't force padding)
+    if idx > nstrai:
+        raise ValueError(f"gpfc index {idx} exceeds nstrai={nstrai}")
 
     prefix, block, pat = _get_userflux_block(text)
-    vals = _parse_float_list(block)
 
-    # Ensure list length matches nstrai
-    if len(vals) < nstrai:
-        vals = vals + ["0.00"] * (nstrai - len(vals))
-    elif len(vals) > nstrai:
-        vals = vals[:nstrai]
+    # Only pad enough to safely edit idx (NOT to nstrai)
+    block = _pad_userflux_block_to_minlen(block, idx, pad_token="0.00")
 
-    vals[idx - 1] = "{:<10.4E}".format(float(value)).strip()
+    nums = list(_NUM.finditer(block))
+    if len(nums) < idx:
+        raise ValueError(f"Padding failed: have {len(nums)} numbers, need at least {idx}")
 
-    new_block = _format_userflux(prefix, vals)
-    return pat.sub(new_block, text, count=1)
+    new_token = f"{float(value):.3E}"  # 5.000E+21 style
+
+    m = nums[idx - 1]
+    a, b = m.span("num")
+    new_block = block[:a] + new_token + block[b:]
+
+    # Keep exact original formatting, just swap the number
+    return pat.sub(prefix + new_block, text, count=1)
