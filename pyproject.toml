@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "solpsmeta"
 version = "0.1.0"
 description = "SOLPS metadata + case builder utilities"
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 dependencies = [
   "numpy",
 ]
