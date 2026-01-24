@@ -230,7 +230,7 @@ def main():
                 continue
             if os.path.exists(os.path.join(run_dir, ".cleaned.json")):
                 continue
-
+#
             try:
                 removed = clean_solps_run_dir(
                     run_dir,
@@ -267,16 +267,4 @@ def main():
 
 
 if __name__ == "__main__":
-
-    #python3 run_libe_solps.py \
-    #  --baserun-src /Users/42d/runs/d3d/174310_LDRD/3500_D+C+Ne/baserun \
-    #  --warm-start-dir /Users/42d/runs/d3d/174310_LDRD/3500_D+C+Ne/puff2.5e21_ss \
-    #  --dry-run \
-    #  --sim-max 4 --nworkers 2 --batch 2
-
-
-
     main()
-
-
-#
