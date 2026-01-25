@@ -15,7 +15,7 @@ def parse_args():
     p.add_argument("--puff-d2", type=float, required=True)
     p.add_argument("--puff-ne", type=float, required=True)
     p.add_argument("--p-w", type=float, required=True, help="Total power [W]")
-    p.add_argument("--core-flux", type=float, required=True)
+    p.add_argument("--core-density", type=float, required=True)
     p.add_argument("--dna", type=float, required=True)
     p.add_argument("--hci", type=float, required=True)
 
@@ -77,7 +77,7 @@ def main():
         puff_targets=puff_targets,
         Pe_W=Pe_W,
         Pi_W=Pi_W,
-        core_flux=args.core_flux,
+        core_density=args.core_density,
         transport=transport,
         notes=args.notes,
         converged=False,
@@ -92,7 +92,7 @@ def main():
         spec["provenance"]["code"]["git"] = _git_info(args.solps_repo)
 
 
-    out_path = os.path.join(out_dir, f"params_{case_id}.json")
+    out_path = os.path.join(out_dir, f"params.json")
     with open(out_path, "w") as f:
         json.dump(spec, f, indent=2)
 
@@ -108,7 +108,7 @@ if __name__ == "__main__":
 #  --puff-d2 2.5e21 \
 #  --puff-ne 1e19 \
 #  --p-w 4e6 \
-#  --core-flux 7.5e20 \
+#  --core-density 7.5e20 \
 #  --dna 1.067 \
 #  --hci 0.62 \
 #  --solps-repo /Users/42d/solps-iter \

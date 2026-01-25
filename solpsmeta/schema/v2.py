@@ -5,7 +5,7 @@ import os
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-
+import subprocess
 
 @dataclass
 class SpeciesSpec:
@@ -35,7 +35,7 @@ def meta_builder(
     puff_targets: Dict[str, Dict[str, Any]],
     Pe_W: float,
     Pi_W: float,
-    core_flux: float,
+    core_density: float,
     transport: Dict[str, Any],
     notes: str = "",
     converged: bool = False,
@@ -55,21 +55,21 @@ def meta_builder(
             "authors": authors,
             "location": {
                 "site": "ORNL",
-                "cluster": os.environ.get("HOSTNAME", "unknown"),
+                "cluster": os.environ.get("HOSTNAME", "ORC"),
                 "path": run_dir,
             },
             "status": {"converged": converged, "notes": notes},
         },
         "inputs": {
             "power": {"Pe_W": Pe_W, "Pi_W": Pi_W},
-            "core": {"particle_flux_s-1": core_flux},
+            "core": {"density_m-3": core_density},
             "species": {
                 "list": species.list,
                 "roles": {"main_ion": species.main_ion, "impurities": species.impurities},
                 "charge_state_ranges": species.charge_state_ranges,
             },
             "gas_puffing": {
-                "units": "s-1",
+                "units": "atom/s-1",
                 "model": "userfluxparm(1,1)",
                 "targets": puff_targets,
             },

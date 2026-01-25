@@ -219,66 +219,63 @@ def clean_solps_run_dir(run_dir: str,
 
     return removed
 
+
 def compress_and_remove_run_dir(run_dir: str, level: int = 19) -> str:
-    """
-    Create run_dir.tar.zst next to run_dir, verify it, then delete run_dir.
-    Returns archive path.
-    """
     run_path = Path(run_dir).resolve()
     if not run_path.is_dir():
         raise FileNotFoundError(f"run_dir not found or not a directory: {run_path}")
 
-    archive_path = run_path.with_suffix(run_path.suffix + ".tar.zst") if run_path.suffix else Path(str(run_path) + ".tar.zst")
-    # Better: keep naming consistent with your shell usage: <dir>.tar.zst
     archive_path = Path(str(run_path) + ".tar.zst")
 
-    # If archive already exists, we can verify it and (optionally) delete the folder.
+    # If archive already exists, verify and return
     if archive_path.exists():
         subprocess.run(["zstd", "-t", str(archive_path)], check=True)
-        # If archive is OK, you may choose to remove the directory:
-        # shutil.rmtree(run_path)
         return str(archive_path)
-#
-#    # Build tar command: tar --sort=name -I 'zstd -19 -T0' -cvf <archive> <dir>
-#    # Note: tar expects archive file path, then directory path.
-#    cmd = [
-#        "tar",
-#        "--sort=name",
-#        "-I",
-#        f"zstd -{level} -T0",
-#        "-cvf",
-#        str(archive_path),
-#        str(run_path.name),
-#    ]
 
-    # Prefer GNU tar if available (macOS: `brew install gnu-tar` gives `gtar`)
-    tar_prog = shutil.which("gtar") or shutil.which("tar")
+    if "archive_path" not in existing:
+        cur.execute("ALTER TABLE cases ADD COLUMN archive_path TEXT;")
+
+
+    parent = run_path.parent
+    dir_name = run_path.name
+
+    # Prefer GNU tar if available (brew install gnu-tar -> gtar)
+    gtar = shutil.which("gtar")
+    tar_prog = gtar or shutil.which("tar")
     if not tar_prog:
         raise RuntimeError("No tar program found (need tar or gtar in PATH)")
 
-    # Build tar command.
-    # GNU tar supports --sort=name; bsdtar does not.
-    cmd = [tar_prog]
-
     is_gnu_tar = Path(tar_prog).name == "gtar"
+
     if is_gnu_tar:
-        cmd += ["--sort=name"]
+        # GNU tar supports --sort=name and -I "zstd ...args..."
+        cmd = [
+            tar_prog,
+            "--sort=name",
+            "-I",
+            f"zstd -{level} -T0",
+            "-cvf",
+            str(archive_path),
+            dir_name,
+        ]
+        subprocess.run(cmd, cwd=str(parent), check=True)
+    else:
+        # bsdtar on macOS: do NOT use -I with args; use a pipe instead.
+        # tar -cf - <dir> | zstd -19 -T0 -o <archive>
+        tar_cmd = [tar_prog, "-cf", "-", dir_name]
+        zstd_cmd = ["zstd", f"-{level}", "-T0", "-o", str(archive_path)]
 
-    # Use zstd via -I for both GNU tar and bsdtar (libarchive tar supports -I too)
-    cmd += [
-        "-I",
-        f"zstd -{level} -T0",
-        "-cvf",
-        str(archive_path),
-        str(run_path.name),
-    ]
+        with subprocess.Popen(tar_cmd, cwd=str(parent), stdout=subprocess.PIPE) as p_tar:
+            with subprocess.Popen(zstd_cmd, cwd=str(parent), stdin=p_tar.stdout) as p_zstd:
+                p_tar.stdout.close()  # allow tar to receive SIGPIPE if zstd exits
+                rc_tar = p_tar.wait()
+                rc_zstd = p_zstd.wait()
 
-
-    # Run tar from parent directory so the archive doesn’t store absolute paths
-    parent = run_path.parent
-
-    # Create archive
-    subprocess.run(cmd, cwd=str(parent), check=True)
+        if rc_tar != 0 or rc_zstd != 0:
+            raise subprocess.CalledProcessError(
+                rc_tar or rc_zstd,
+                tar_cmd if rc_tar != 0 else zstd_cmd
+            )
 
     # Verify archive integrity BEFORE deleting data
     subprocess.run(["zstd", "-t", str(archive_path)], cwd=str(parent), check=True)

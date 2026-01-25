@@ -44,7 +44,7 @@ def apply_edits(run_dir: str, spec: Dict[str, Any]) -> None:
 
     bnd = _set_psol_value(bnd, "enepar", inputs["power"]["Pe_W"])
     bnd = _set_psol_value(bnd, "enipar", inputs["power"]["Pi_W"])
-    bnd = _set_conpar_density(bnd, inputs["core"]["particle_flux_s-1"])
+    bnd = _set_conpar_density(bnd, inputs["core"]["density_m-3"])
 
     with open(bnd_path, "w") as f:
         f.write(bnd)

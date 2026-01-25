@@ -5,8 +5,8 @@ import numpy as np
 from scipy.spatial import cKDTree
 
 
-DEFAULT_COLS = ["puff_d2", "puff_ne", "ptot_w", "core_flux", "dna", "hci", "hce"]
-DEFAULT_LOG_COLS = {"puff_d2", "puff_ne", "ptot_w", "core_flux"}  # huge dynamic range
+DEFAULT_COLS = ["puff_d2", "puff_ne", "ptot_w", "core_density", "dna", "hci", "hce"]
+DEFAULT_LOG_COLS = {"puff_d2", "puff_ne", "ptot_w", "core_density"}  # huge dynamic range
 
 
 def fetch_cases(db_path, cols, only_good=False):
@@ -74,7 +74,7 @@ def parse_args():
         "--x",
         type=float,
         nargs="+",
-        help="Query vector values in the same order as --cols (default: puff_d2 puff_ne ptot_w core_flux dna hci hce)",
+        help="Query vector values in the same order as --cols (default: puff_d2 puff_ne ptot_w core_density dna hci hce)",
     )
 
     # Option B: pass named values (friendlier)
@@ -90,7 +90,7 @@ def parse_args():
     p.add_argument(
         "--no-log",
         action="store_true",
-        help="Disable log10 transform (by default logs puff_d2,puff_ne,ptot_w,core_flux)",
+        help="Disable log10 transform (by default logs puff_d2,puff_ne,ptot_w,core_density)",
     )
     p.add_argument(
         "--only-good",
@@ -115,7 +115,7 @@ def main():
             "puff_d2": args.puff_d2,
             "puff_ne": args.puff_ne,
             "ptot_w": args.ptot_w,
-            "core_flux": args.core_flux,
+            "core_density": args.core_density,
             "dna": args.dna,
             "hci": args.hci,
             "hce": args.hce,

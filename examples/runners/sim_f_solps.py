@@ -31,9 +31,9 @@ def sim_f(H, persis_info, sim_specs, libE_info):
 
     for i, row in enumerate(H):
         # Map libE variables -> physical values
-         # Expect vector order: puff_D2, puff_Ne, P_W, core_flux, dna, hci
+         # Expect vector order: puff_D2, puff_Ne, P_W, core_density, dna, hci
         xv = row["x"]
-        puff_D2, puff_Ne, P_W, core_flux, dna, hci = map(float, xv)
+        puff_D2, puff_Ne, P_W, core_density, dna, hci = map(float, xv)
 
         Pe_W = 0.5 * P_W
         Pi_W = 0.5 * P_W
@@ -44,7 +44,7 @@ def sim_f(H, persis_info, sim_specs, libE_info):
             "P_W": P_W,
             "Pe_W": Pe_W,
             "Pi_W": Pi_W,
-            "core_flux": core_flux,
+            "core_density": core_density,
             "dna": dna,
             "hci": hci,
         }
@@ -88,7 +88,7 @@ def sim_f(H, persis_info, sim_specs, libE_info):
             puff_targets=puff_targets,
             Pe_W=x["Pe_W"],
             Pi_W=x["Pi_W"],
-            core_flux=x["core_flux"],
+            core_density=x["core_density"],
             transport=transport,
             notes=base_meta.get("notes", ""),
             converged=False,
