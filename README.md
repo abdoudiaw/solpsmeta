@@ -101,7 +101,7 @@ python3 case.py -h
     "authors": [
       "A. Diaw",
       "J. Lore",
-      "J.S. Park",
+      "J.-S. Park",
       "S. De Pascuale"
     ],
     "location": {
