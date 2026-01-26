@@ -87,6 +87,102 @@ To see all options:
 python3 case.py -h
 ```
 
+### Metadata structure: params.json
+
+```
+{
+  "schema": "solpsmeta",
+  "machine": "DIII-D",
+  "campaign": "174310_LDRD",
+  "case": {
+    "case_id": "58da3b1f__D_C_Ne",
+    "created": "2026-01-26",
+    "owner": "ORNL",
+    "authors": [
+      "A. Diaw",
+      "J. Lore",
+      "J.S. Park",
+      "S. De Pascuale"
+    ],
+    "location": {
+      "site": "ORNL",
+      "cluster": "ORC",
+      "path": "/path/to/run_dir"
+    },
+    "status": {
+      "converged": false,
+      "notes": ""
+    },
+    "run_id": "58da3b1f",
+    "label": "D_C_Ne",
+    "created_ts": "2026-01-26T04:45:59"
+  },
+  "inputs": {
+    "power": {
+      "Pe_W": 0.0,
+      "Pi_W": 0.0
+    },
+    "core": {
+      "density_m-3": 0.0
+    },
+    "species": {
+      "list": ["D", "C", "Ne"],
+      "roles": {
+        "main_ion": "D",
+        "impurities": ["C", "Ne"]
+      },
+      "charge_state_ranges": {
+        "D": [0, 1],
+        "C": [0, 6],
+        "Ne": [0, 10]
+      }
+    },
+    "gas_puffing": {
+      "units": "atom/s-1",
+      "model": "userfluxparm(1,1)",
+      "targets": {
+        "D2": {
+          "value": 0.0,
+          "gpfc": [0, 0, 0]
+        },
+        "Ne": {
+          "value": 0.0,
+          "gpfc": [0, 0, 0]
+        }
+      }
+    },
+    "transport": {
+      "units": "SI",
+      "slots": 20,
+      "dna": {
+        "type": "global",
+        "value": 0.0
+      },
+      "hci": {
+        "type": "global",
+        "value": 0.0
+      },
+      "hce": {
+        "type": "global",
+        "value": 0.0
+      }
+    },
+    "time_dependence": {
+      "mode": "steady_state"
+    }
+  },
+  "provenance": {
+    "code": {
+      "solps_version": "",
+      "git": {
+        "repo": "",
+        "commit": ""
+      }
+    }
+  }
+}
+```
+
 ---
 
 ### 2) Launch an ensemble scan with libEnsemble
