@@ -1,0 +1,115 @@
+{
+  "schema": "solpsmeta",
+  "machine": "DIII-D",
+  "campaign": "174310_LDRD",
+  "case": {
+    "case_id": "58da3b1f__D_C_Ne",
+    "created": "2026-01-26",
+    "owner": "ORNL",
+    "authors": [
+      "A. Diaw",
+      "J. Lore",
+      "J.S. Park",
+      "S. De Pascuale"
+    ],
+    "location": {
+      "site": "ORNL",
+      "cluster": "ORC",
+      "path": "/home/cloud/solps-runs/diii-d/runners/ens__DIII-D__174310_LDRD__D_C_Ne__ss__lhs__20260125_182014/run_58da3b1f__D_C_Ne"
+    },
+    "status": {
+      "converged": false,
+      "notes": "libEnsemble LHS"
+    },
+    "run_id": "58da3b1f",
+    "label": "D_C_Ne",
+    "created_ts": "2026-01-26T04:45:59"
+  },
+  "inputs": {
+    "power": {
+      "Pe_W": 5791216.12776128,
+      "Pi_W": 5791216.12776128
+    },
+    "core": {
+      "density_m-3": 7.5e+20
+    },
+    "species": {
+      "list": [
+        "D",
+        "C",
+        "Ne"
+      ],
+      "roles": {
+        "main_ion": "D",
+        "impurities": [
+          "C",
+          "Ne"
+        ]
+      },
+      "charge_state_ranges": {
+        "D": [
+          0,
+          1
+        ],
+        "C": [
+          0,
+          6
+        ],
+        "Ne": [
+          0,
+          10
+        ]
+      }
+    },
+    "gas_puffing": {
+      "units": "atom/s-1",
+      "model": "userfluxparm(1,1)",
+      "targets": {
+        "D2": {
+          "value": 5e+21,
+          "gpfc": [
+            2,
+            0,
+            0
+          ]
+        },
+        "Ne": {
+          "value": 5e+19,
+          "gpfc": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    "transport": {
+      "units": "SI",
+      "slots": 20,
+      "dna": {
+        "type": "global",
+        "value": 1.0
+      },
+      "hci": {
+        "type": "global",
+        "value": 1.0
+      },
+      "hce": {
+        "type": "global",
+        "value": 1.0
+      }
+    },
+    "time_dependence": {
+      "mode": "steady_state"
+    }
+  },
+  "provenance": {
+    "code": {
+      "solps_version": "",
+      "git": {
+        "repo": "",
+        "commit": ""
+      }
+    }
+  }
+}
