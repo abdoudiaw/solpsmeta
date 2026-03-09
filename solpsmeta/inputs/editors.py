@@ -177,7 +177,9 @@ def _parse_gpfc_map(text: str) -> dict:
     for m in re.finditer(r"gpfc\(1,(\d+)\)\s*=\s*([^/\n]+)", text, re.IGNORECASE):
         i = int(m.group(1))
         vals = [v.strip() for v in m.group(2).split(",") if v.strip()]
-        # keep only first 3 numbers
+        # Pad with zeros if fewer than 3 values (D2-only files may omit trailing zeros)
+        while len(vals) < 3:
+            vals.append("0")
         triple = [int(float(vals[0])), int(float(vals[1])), int(float(vals[2]))]
         gpfc[i] = triple
     return gpfc
